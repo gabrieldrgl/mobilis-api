@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  checkin: false
+  van: one
+  home_address: MyString
+  destination_address: MyString
+  person: one
+
+two:
+  checkin: false
+  van: two
+  home_address: MyString
+  destination_address: MyString
+  person: two

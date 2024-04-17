@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_17_193812) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_17_194350) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_17_193812) do
     t.index ["company_id"], name: "index_people_on_company_id"
   end
 
+  create_table "students", force: :cascade do |t|
+    t.boolean "checkin"
+    t.bigint "van_id", null: false
+    t.string "home_address"
+    t.string "destination_address"
+    t.bigint "person_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_students_on_person_id"
+    t.index ["van_id"], name: "index_students_on_van_id"
+  end
+
   create_table "vans", force: :cascade do |t|
     t.string "license_plate"
     t.string "color"
@@ -40,5 +52,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_17_193812) do
   end
 
   add_foreign_key "people", "companies"
+  add_foreign_key "students", "people"
+  add_foreign_key "students", "vans"
   add_foreign_key "vans", "companies"
 end

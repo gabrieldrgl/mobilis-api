@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_17_194350) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_17_194803) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,6 +18,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_17_194350) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "drivers", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "van_id", null: false
+    t.bigint "person_id", null: false
+    t.string "drivers_license"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_drivers_on_company_id"
+    t.index ["person_id"], name: "index_drivers_on_person_id"
+    t.index ["van_id"], name: "index_drivers_on_van_id"
   end
 
   create_table "people", force: :cascade do |t|
@@ -51,6 +63,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_17_194350) do
     t.index ["company_id"], name: "index_vans_on_company_id"
   end
 
+  add_foreign_key "drivers", "companies"
+  add_foreign_key "drivers", "people"
+  add_foreign_key "drivers", "vans"
   add_foreign_key "people", "companies"
   add_foreign_key "students", "people"
   add_foreign_key "students", "vans"

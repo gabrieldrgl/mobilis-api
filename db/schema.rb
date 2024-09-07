@@ -14,12 +14,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_07_135422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "companies", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "devise_api_tokens", force: :cascade do |t|
     t.string "resource_owner_type", null: false
     t.bigint "resource_owner_id", null: false
@@ -36,40 +30,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_07_135422) do
     t.index ["resource_owner_type", "resource_owner_id"], name: "index_devise_api_tokens_on_resource_owner"
   end
 
-  create_table "drivers", force: :cascade do |t|
-    t.bigint "company_id", null: false
-    t.bigint "van_id", null: false
-    t.bigint "person_id", null: false
-    t.string "drivers_license"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_drivers_on_company_id"
-    t.index ["person_id"], name: "index_drivers_on_person_id"
-    t.index ["van_id"], name: "index_drivers_on_van_id"
-  end
-
-  create_table "people", force: :cascade do |t|
-    t.string "name"
-    t.string "phone_number"
-    t.string "cpf"
-    t.bigint "company_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_people_on_company_id"
-  end
-
-  create_table "students", force: :cascade do |t|
-    t.boolean "checkin"
-    t.bigint "van_id", null: false
-    t.string "home_address"
-    t.string "destination_address"
-    t.bigint "person_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["person_id"], name: "index_students_on_person_id"
-    t.index ["van_id"], name: "index_students_on_van_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -82,20 +42,4 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_07_135422) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "vans", force: :cascade do |t|
-    t.string "license_plate"
-    t.string "color"
-    t.bigint "company_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_vans_on_company_id"
-  end
-
-  add_foreign_key "drivers", "companies"
-  add_foreign_key "drivers", "people"
-  add_foreign_key "drivers", "vans"
-  add_foreign_key "people", "companies"
-  add_foreign_key "students", "people"
-  add_foreign_key "students", "vans"
-  add_foreign_key "vans", "companies"
 end

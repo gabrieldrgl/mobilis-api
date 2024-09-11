@@ -1,16 +1,15 @@
 class Company < ApplicationRecord
-  has_many :roles
-  has_many :users, through: :roles
+  has_many :users
 
   def students
-    users.joins(:roles).where(roles: { role: Role.roles[:student], company_id: id }).distinct
+    users.where(role: :student)
   end
 
   def drivers
-    users.joins(:roles).where(roles: { role: Role.roles[:driver], company_id: id }).distinct
+    users.where(role: :driver)
   end
 
   def moderators
-    users.joins(:roles).where(roles: { role: Role.roles[:moderator], company_id: id }).distinct
+    users.where(role: :moderator)
   end
 end

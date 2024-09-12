@@ -1,5 +1,6 @@
 class Company < ApplicationRecord
   has_many :users
+  has_many :vans
 
   def students
     users.where(role: :student)

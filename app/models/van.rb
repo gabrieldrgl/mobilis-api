@@ -4,4 +4,8 @@ class Van < ApplicationRecord
   has_many :students, -> { where(role: :student) }, class_name: "User"
 
   validates :license_plate, presence: true
+
+  def on_route?
+    current_location.present?
+  end
 end

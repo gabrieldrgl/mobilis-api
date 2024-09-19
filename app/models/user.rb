@@ -10,6 +10,7 @@ class User < ApplicationRecord
 
   enum role: { student: 0, driver: 1, moderator: 2 }
 
+  validates :name, presence: true
   validate :van_belongs_to_same_company
 
   private

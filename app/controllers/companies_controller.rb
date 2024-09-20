@@ -1,4 +1,7 @@
 class CompaniesController < ApplicationController
+  skip_before_action :verify_authenticity_token, raise: false
+  before_action :authenticate_devise_api_token!
+
   before_action :set_company, only: %i[show update destroy students drivers moderators]
 
   def show

@@ -1,4 +1,7 @@
 class RoutesController < ApplicationController
+  skip_before_action :verify_authenticity_token, raise: false
+  before_action :authenticate_devise_api_token!
+
   before_action :set_van
   before_action :set_route, only: %i[update]
 

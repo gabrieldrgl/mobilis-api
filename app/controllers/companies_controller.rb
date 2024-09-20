@@ -52,6 +52,6 @@ class CompaniesController < ApplicationController
   end
 
   def company_params
-    params.require(:company).permit(:name, users_attributes: %i[id role])
+    params.require(:company).permit(:name)
   end
 end

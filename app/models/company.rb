@@ -2,8 +2,6 @@ class Company < ApplicationRecord
   has_many :users
   has_many :vans
 
-  accepts_nested_attributes_for :users, allow_destroy: false
-
   def students
     users.where(role: :student)
   end

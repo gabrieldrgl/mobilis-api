@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  end_time: 2024-09-20 14:43:06
+  status: 1
+  van: one
+
+two:
+  end_time: 2024-09-20 14:43:06
+  status: 1
+  van: two

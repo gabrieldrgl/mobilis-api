@@ -1,6 +1,6 @@
 class VansController < ApplicationController
   before_action :set_company
-  before_action :set_van, only: %i[show update destroy]
+  before_action :set_van, only: %i[show update destroy current_location]
 
   def index
     @vans = @company.vans
@@ -32,6 +32,16 @@ class VansController < ApplicationController
   def destroy
     @van.destroy
     head :no_content
+  end
+
+  def current_location
+    if @van.route_in_progress?
+      last_location = @van.routes.last.locations.last
+
+      render json: { current_location: last_location }, status: :ok
+    else
+      render json: { error: "No route in progress" }, status: :not_found
+    end
   end
 
   private

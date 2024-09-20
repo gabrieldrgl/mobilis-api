@@ -6,7 +6,7 @@ class Van < ApplicationRecord
 
   validates :license_plate, presence: true
 
-  def on_route?
-    current_location.present?
+  def route_in_progress?
+    routes.last&.in_progress?
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_20_174306) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_20_174900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,6 +46,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_20_174306) do
     t.index ["previous_refresh_token"], name: "index_devise_api_tokens_on_previous_refresh_token"
     t.index ["refresh_token"], name: "index_devise_api_tokens_on_refresh_token"
     t.index ["resource_owner_type", "resource_owner_id"], name: "index_devise_api_tokens_on_resource_owner"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.float "latitude"
+    t.float "longitude"
+    t.bigint "route_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["route_id"], name: "index_locations_on_route_id"
   end
 
   create_table "routes", force: :cascade do |t|
@@ -86,6 +95,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_20_174306) do
   end
 
   add_foreign_key "addresses", "users"
+  add_foreign_key "locations", "routes"
   add_foreign_key "routes", "vans"
   add_foreign_key "users", "companies"
   add_foreign_key "users", "vans"

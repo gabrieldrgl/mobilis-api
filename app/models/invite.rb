@@ -3,7 +3,7 @@ class Invite < ApplicationRecord
 
   before_create :generate_token
 
-  validates :token, presence: true, uniqueness: true
+  validates :token, uniqueness: true
   enum role: { student: 0, driver: 1, moderator: 2 }
 
   def generate_token

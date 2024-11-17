@@ -2,7 +2,7 @@ class CompaniesController < ApplicationController
   skip_before_action :verify_authenticity_token, raise: false
   before_action :authenticate_devise_api_token!
 
-  before_action :set_company, only: %i[show update destroy students drivers moderators]
+  before_action :set_company, only: %i[show update destroy students drivers moderators remove_user]
 
   def show
     render json: @company, status: :ok
@@ -43,6 +43,16 @@ class CompaniesController < ApplicationController
   def moderators
     @moderators = @company.moderators
     render json: @moderators, status: :ok
+  end
+
+  def remove_user
+    user = @company.users.find_by(id: params[:user_id])
+    if user
+      user.update(company_id: nil, van: nil)
+      render json: { message: "Aluno removido com sucesso." }, status: :ok
+    else
+      render json: { error: "Aluno não encontrado." }, status: :not_found
+    end
   end
 
   private

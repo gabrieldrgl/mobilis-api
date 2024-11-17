@@ -11,13 +11,16 @@ class VansController < ApplicationController
   end
 
   def show
-    render json: @van, status: :ok
+    render json: {van: @van, driver: @van.driver, students: @van.students}, status: :ok
   end
 
   def create
     @van = @company.vans.build(van_params)
 
     if @van.save
+      @van.driver = User.find(permitted_params[:driver_id]) if permitted_params[:driver_id].present?
+      @van.students = User.find(permitted_params[:student_ids]) if permitted_params[:student_ids].present?
+
       render json: @van, status: :created
     else
       render json: { errors: @van.errors.full_messages }, status: :unprocessable_entity
@@ -26,6 +29,9 @@ class VansController < ApplicationController
 
   def update
     if @van.update(van_params)
+      @van.driver = User.find(permitted_params[:driver_id]) if permitted_params[:driver_id].present?
+      @van.students = User.find(permitted_params[:student_ids]) if permitted_params[:student_ids].present?
+
       render json: @van, status: :ok
     else
       render json: { errors: @van.errors.full_messages }, status: :unprocessable_entity
@@ -59,5 +65,9 @@ class VansController < ApplicationController
 
   def van_params
     params.require(:van).permit(:license_plate, :current_location)
+  end
+
+  def permitted_params
+    params.require(:van).permit(:driver_id, student_ids: [])
   end
 end

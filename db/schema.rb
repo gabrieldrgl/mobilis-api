@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_20_212729) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_19_010226) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,16 +20,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_20_212729) do
     t.string "city"
     t.string "state"
     t.string "postal_code"
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "latitude"
+    t.string "longitude"
+    t.bigint "van_id"
     t.index ["user_id"], name: "index_addresses_on_user_id"
+    t.index ["van_id"], name: "index_addresses_on_van_id"
   end
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "cnpj"
+    t.index ["cnpj"], name: "index_companies_on_cnpj", unique: true
   end
 
   create_table "devise_api_tokens", force: :cascade do |t|
@@ -100,10 +106,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_20_212729) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "current_location"
+    t.string "max_checkin_time_away"
+    t.string "max_checkin_time_return"
+    t.boolean "first_route_of_day", default: true, null: false
     t.index ["company_id"], name: "index_vans_on_company_id"
   end
 
   add_foreign_key "addresses", "users"
+  add_foreign_key "addresses", "vans"
   add_foreign_key "invites", "companies"
   add_foreign_key "locations", "routes"
   add_foreign_key "routes", "vans"

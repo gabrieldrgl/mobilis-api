@@ -19,8 +19,17 @@ class InvitesController < ApplicationController
     if @invite.nil?
       render json: { error: "Invalid invite" }, status: :not_found
     else
-      current_devise_api_token.resource_owner.update(company: @invite.company, role: @invite.role)
+      if @invite.role == "student"
+        @address = Address.new(address_params)
+        @address.user = current_devise_api_token.resource_owner
 
+        unless @address.save
+          render json: { errors: @address.errors.full_messages }, status: :unprocessable_entity
+          return
+        end
+      end
+
+      current_devise_api_token.resource_owner.update(company: @invite.company, role: @invite.role, name: params[:name])
       @invite.destroy
 
       render json: { message: "You have successfully joined the company!", role: current_devise_api_token.resource_owner.role }, status: :ok
@@ -28,6 +37,10 @@ class InvitesController < ApplicationController
   end
 
   private
+
+  def address_params
+    params.require(:address).permit(:street, :city, :state, :postal_code, :number, :latitude, :longitude)
+  end
 
   def invite_params
     params.require(:invite).permit(:role)

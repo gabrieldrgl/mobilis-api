@@ -5,7 +5,16 @@ class UsersController < ApplicationController
   before_action :set_user
 
   def show
-    render json: { user: @user }, status: :ok
+    render json: { user: @user, van: @user.van }, status: :ok
+  end
+
+  def checkin
+    # Atualiza o checkin para true
+    if @user.update(checkin: true)
+      render json: { message: "Check-in realizado com sucesso!" }, status: :ok
+    else
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   private

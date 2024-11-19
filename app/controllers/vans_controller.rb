@@ -11,7 +11,7 @@ class VansController < ApplicationController
   end
 
   def show
-    render json: {van: @van, driver: @van.driver, students: @van.students}, status: :ok
+    render json: {van: @van, driver: @van.driver, students: @van.students, destination: @van.destination}, status: :ok
   end
 
   def create
@@ -20,6 +20,13 @@ class VansController < ApplicationController
     if @van.save
       @van.driver = User.find(permitted_params[:driver_id]) if permitted_params[:driver_id].present?
       @van.students = User.find(permitted_params[:student_ids]) if permitted_params[:student_ids].present?
+      @address = Address.new(address_params)
+      @address.van = @van
+
+      unless @address.save
+        render json: { errors: @address.errors.full_messages }, status: :unprocessable_entity
+        return
+      end
 
       render json: @van, status: :created
     else
@@ -31,6 +38,14 @@ class VansController < ApplicationController
     if @van.update(van_params)
       @van.driver = User.find(permitted_params[:driver_id]) if permitted_params[:driver_id].present?
       @van.students = User.find(permitted_params[:student_ids]) if permitted_params[:student_ids].present?
+
+      @address = Address.new(address_params)
+      @address.van = @van
+
+      unless @address.save
+        render json: { errors: @address.errors.full_messages }, status: :unprocessable_entity
+        return
+      end
 
       render json: @van, status: :ok
     else
@@ -64,7 +79,11 @@ class VansController < ApplicationController
   end
 
   def van_params
-    params.require(:van).permit(:license_plate, :current_location)
+    params.require(:van).permit(:license_plate, :current_location, :max_checkin_time_away, :max_checkin_time_return)
+  end
+
+  def address_params
+    params.require(:address).permit(:street, :city, :postal_code, :number, :latitude, :longitude)
   end
 
   def permitted_params

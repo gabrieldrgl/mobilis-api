@@ -11,6 +11,7 @@ class CompaniesController < ApplicationController
   def create
     @company = Company.new(company_params)
     if @company.save
+      current_devise_api_token.resource_owner.update!(company: @company, role: params[:role], name: params[:name])
       render json: @company, status: :created
     else
       render json: { errors: @company.errors.full_messages }, status: :unprocessable_entity
@@ -62,6 +63,6 @@ class CompaniesController < ApplicationController
   end
 
   def company_params
-    params.require(:company).permit(:name)
+    params.require(:company).permit(:name, :cnpj)
   end
 end
